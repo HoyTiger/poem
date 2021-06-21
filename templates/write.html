@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>看图写诗</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../static/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../static/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../static/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect. -->
+    <link rel="stylesheet" href="../static/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../static/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+
+
+
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+<div class="wrapper">
+
+    <!-- Main Header -->
+
+    <header class="main-header">
+
+    <!-- Logo -->
+    <header class="main-header">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo"><i class="fa fa-balance-scale"></i> <b>看图写诗</b></span>
+        <!-- logo for regular state and mobile devices -->
+    </header>
+
+    <!-- Header Navbar -->
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="active" >
+          <a href="/write"><i class="fa fa-link"></i> <span>看图写诗</span>
+
+          </a>
+        </li>
+
+        <li>
+          <a href="/record"><i class="fa fa-link"></i> <span>历史记录</span>
+          </a>
+        </li>
+          <li >
+          <a href="/shou"><i class="fa fa-link"></i> <span>收藏</span>
+          </a>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <fieldset class="layui-elem-field layui-field-title col-md-12" style="margin-top: 30px;">
+                        <legend>上传图片</legend>
+                    </fieldset>
+
+                    <div class="layui-upload col-md-12">
+                        <button type="button" class="layui-btn" id="test1">上传图片</button>
+                        <div class="layui-upload-list">
+                            <img class="layui-upload-img" id="demo1" style="width: 600px;height: 400px">
+                            <p id="demoText"></p>
+                        </div>
+                        <div style="width: 95px;">
+                            <div class="layui-progress layui-progress-big" lay-showpercent="yes" lay-filter="demo"
+                                 style="width: 600px">
+                                <div class="layui-progress-bar" lay-percent=""></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <fieldset class="layui-elem-field layui-field-title col-md-12" style="margin-top: 30px;">
+                        <legend>生成诗句</legend>
+                    </fieldset>
+                    <button type="button" class="layui-btn" id="test" onclick="display_poem()">生成诗句</button>
+                    <div>
+                        <br>
+                        <p id="demoText2"></p>
+                    </div>
+                    <fieldset class="layui-elem-field layui-field-title col-md-12" style="margin-top: 30px;">
+                        <legend>评分</legend>
+                    </fieldset>
+
+                    <div id="test3" class="col-md-12"></div>
+                    <div>
+                        <div id="test4">
+                        </div>
+                    </div>
+                    <br>
+                    <button type="button" class="layui-btn" id="test2">保存</button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 3 -->
+<script src="../static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../static/dist/js/adminlte.min.js"></script>
+
+<script src="../static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script src="../static/bower_components/layer/layer.js"></script>
+<script src="../static/layui/layui.js" charset="utf-8"></script>
+
+<script>
+    var poem = ''
+    var score = 0
+
+    function display_poem() {
+        var demoText = $('#demoText2');
+        demoText.html('<span>' + poem + '</span>');
+    }
+
+
+    layui.use(['upload', 'element', 'layer'], function () {
+
+        var $ = layui.jquery
+            , upload = layui.upload
+            , element = layui.element
+            , layer = layui.layer;
+
+        //常规使用 - 普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1',
+            accept: 'file'
+            , url: '/up_photo' //改成您自己的上传接口
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+
+                element.progress('demo', '0%'); //进度条复位
+                layer.msg('上传中', {icon: 16, time: 0});
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功的一些操作
+                //……
+                poem = res.poem
+
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+            //进度条
+            , progress: function (n, index, e) {
+                element.progress('demo', n + '%'); //可配合 layui 进度条元素使用
+                if (n == 100) {
+                    layer.msg('上传完毕', {icon: 1, time: 7000});
+                }
+            }
+        });
+
+        $('#test2').click(function () {
+            var a = score;
+            var data = {"data": JSON.stringify({"score": a})}
+            $.post({
+                url: '/save',
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    if (res['code'] == 1)
+                        layer.msg('保存成功')
+                    else
+                        layer.msg('保存失败')
+                }
+            })
+        })
+
+
+    })
+
+    layui.use(['rate'], function () {
+        var rate = layui.rate;
+        rate.render({
+            elem: '#test4'
+            , value: 0
+            , half: true
+            , text: true
+            , choose: function (value) {
+                score = value
+                layer.msg("获取分数：" + score);
+            }
+        });
+
+    })
+
+</script>
+
+
+</body>
+</html>

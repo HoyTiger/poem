@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>看图写诗</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../static/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../static/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../static/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect. -->
+    <link rel="stylesheet" href="../static/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../static/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+    <style type="text/css">
+            .layui-table-cell{
+                height: auto!important;
+                white-space: normal;
+            }
+            .img-select img {
+        width: 500px;
+        height: 300px;
+    }
+
+    .dialog-bg {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.4);
+    }
+        .dialog-bg .img-box {
+            width: 1165px;
+            height: 650px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -582px;
+            margin-top: -340px;
+        }
+
+            .dialog-bg .img-box img {
+                width: 100%;
+                height: 100%;
+            }
+    </style>
+
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini">
+<div class="wrapper">
+
+    <!-- Main Header -->
+
+    <header class="main-header">
+
+    <!-- Logo -->
+    <header class="main-header">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo"><i class="fa fa-balance-scale"></i> <b>看图写诗</b></span>
+        <!-- logo for regular state and mobile devices -->
+    </header>
+
+    <!-- Header Navbar -->
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li>
+          <a href="/write"><i class="fa fa-link"></i> <span>看图写诗</span>
+
+          </a>
+        </li>
+
+        <li  class="active" >
+          <a href="/record"><i class="fa fa-link"></i> <span>历史记录</span>
+          </a>
+        </li>
+          <li >
+          <a href="/shou"><i class="fa fa-link"></i> <span>收藏</span>
+          </a>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+
+<section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">历史记录</h3>
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>图片</th>
+                  <th>诗句</th>
+                  <th>得分</th>
+                  <th>收藏</th>
+                </tr>
+                </thead>
+                  <tbody>
+                    {% for item in output %}
+                    <tr>
+                        <td>{{ item.time }}</td>
+                        <td><div class="img-select"><img id="img" src="{{ item.photo_path }}" style="width: 100px; height: 80px"></div></td>
+                        <td>{{ item.poem }}</td>
+                        <td>{{ item.score }}</td>
+                        <td><a id="{{ item.time }}" class="btn btn-xs btn-info btn-flat" onclick="function1(this)">收藏</a></td>
+
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+ <div class="dialog-bg" id="dialog-bg">
+    <div class="img-box" id="img-box">
+        <img src="">
+    </div>
+</div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 3 -->
+<script src="../static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../static/dist/js/adminlte.min.js"></script>
+
+<script src="../static/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script src="../static/bower_components/layer/layer.js"></script>
+<script src="../static/layui/layui.js" charset="utf-8"></script>
+
+<script type="text/javascript">
+    //无论点击哪一个img弹出层都会展示相应的图片。
+    $(".img-select").find("img").on("click", function () {
+        $(this).each(function () {
+            var $this = $(this);
+            var $img = $this.attr("src");//获取当前点击img的src的值
+            $("#img-box").find("img").attr("src", $img);//将获取的当前点击img的src赋值到弹出层的图片的src
+            $("#dialog-bg").show();//弹出层显示
+        });
+    });
+
+    //弹出层隐藏
+    $("#dialog-bg").on("click", function () {
+        $(this).hide();//
+    });
+</script>
+
+<script>
+   $(function () {
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+
+   function xda(){
+      var _this = $(this);//将当前的pimg元素作为_this传入函数
+      imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+   }
+
+   function function1(ele){
+       var id = ele.id;
+        var data = {"data": JSON.stringify({"time": id})}
+            $.post({
+                url: '/shoucang',
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    if (res['code'] == 1)
+                        layer.msg('收藏成功')
+                    else
+                        layer.msg('收藏失败')
+                }
+            })
+   }
+
+
+</script>
+
+
+
+
+</body>
+</html>
